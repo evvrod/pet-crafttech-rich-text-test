@@ -1,25 +1,41 @@
-import html2canvas from "html2canvas";
-import Konva from "konva";
-import { useEffect, useRef, useState } from "react";
-import { Group, Rect } from "react-konva";
-import { Html } from "react-konva-utils";
-import HtmlText from "../htmlText/HtmlText";
+import html2canvas from 'html2canvas';
+import Konva from 'konva';
+import { useEffect, useRef, useState } from 'react';
+import { Group, Rect } from 'react-konva';
+import { Html } from 'react-konva-utils';
 
-const Shape = (props: any) => {
+import HtmlText from '../htmlText/HtmlText';
+
+import { Tool } from '../../types/types';
+
+interface IShapeProps {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  tool: Tool;
+  html: string;
+  id: string;
+  text: string;
+}
+
+export default function Shape(props: IShapeProps) {
   const { x, y, width, height, tool, html, id, text } = props;
+
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(text);
 
-  const groupRef = useRef<any>(null);
-  const imageRef = useRef<any>(null);
-  const htmlRef = useRef<any>(null);
-  const renderImage = async () => {
+  const groupRef = useRef<Konva.Group | null>(null);
+  const imageRef = useRef<Konva.Image | null>(null);
+  const htmlRef = useRef<HTMLDivElement>(null);
+
+  async function renderImage() {
     const htmltext = document.getElementById(`htmltext_${id}`);
     if (htmltext) {
       const innerhtml = htmltext.innerHTML;
       if (innerhtml) {
         const canvas = await html2canvas(htmltext, {
-          backgroundColor: "rgba(0,0,0,0)",
+          backgroundColor: 'rgba(0,0,0,0)',
         });
         const shape = new Konva.Image({
           x: 0,
@@ -28,18 +44,20 @@ const Shape = (props: any) => {
           scaleY: 1 / window.devicePixelRatio,
           image: canvas,
         });
-        groupRef.current.add(shape);
+        if (groupRef.current) {
+          groupRef.current.add(shape);
+        }
         imageRef.current = shape;
       } else return;
     } else return;
-  };
+  }
 
   useEffect(() => {
     renderImage();
   }, []);
 
   const handleClick = () => {
-    if (tool === "shape") {
+    if (tool === 'shape') {
       return;
     } else {
       setIsEditing((prev) => !prev);
@@ -53,14 +71,14 @@ const Shape = (props: any) => {
     }
   };
 
-  const handleInput = (e: any) => {
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
   return (
     <>
       <Group x={x} y={y} onClick={handleClick} ref={groupRef} draggable>
-        <Rect stroke={"black"} width={width} height={height} />
+        <Rect stroke={'black'} width={width} height={height} />
         {isEditing && (
           <Html>
             <textarea value={value} onChange={handleInput} />
@@ -72,6 +90,4 @@ const Shape = (props: any) => {
       </Html>
     </>
   );
-};
-
-export default Shape;
+}
