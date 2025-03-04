@@ -1,10 +1,12 @@
-import html2canvas from 'html2canvas';
-import Konva from 'konva';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { Group, Rect } from 'react-konva';
 import { Html } from 'react-konva-utils';
+import Konva from 'konva';
+import html2canvas from 'html2canvas';
 
+import TextEditor from '../textEditor/TextEditor';
 import HtmlText from '../htmlText/HtmlText';
+import 'react-quill/dist/quill.snow.css'; // или другой стиль по вашему выбору
 
 import { Tool } from '../../types/types';
 
@@ -20,60 +22,69 @@ interface IShapeProps {
 }
 
 export default function Shape(props: IShapeProps) {
-  const { x, y, width, height, tool, html, id, text } = props;
+  const { x, y, width, height, tool, html, id } = props;
 
   const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(text);
+  const [htmlValue, setHtmlValue] = useState(html);
 
   const groupRef = useRef<Konva.Group | null>(null);
   const imageRef = useRef<Konva.Image | null>(null);
   const htmlRef = useRef<HTMLDivElement>(null);
 
-  async function renderImage() {
-    const htmltext = document.getElementById(`htmltext_${id}`);
-    if (htmltext) {
-      const innerhtml = htmltext.innerHTML;
-      if (innerhtml) {
-        const canvas = await html2canvas(htmltext, {
-          backgroundColor: 'rgba(0,0,0,0)',
-        });
-        const shape = new Konva.Image({
-          x: 0,
-          y: height / 2,
-          scaleX: 1 / window.devicePixelRatio,
-          scaleY: 1 / window.devicePixelRatio,
-          image: canvas,
-        });
-        if (groupRef.current) {
-          groupRef.current.add(shape);
-        }
-        imageRef.current = shape;
-      } else return;
-    } else return;
-  }
+  const renderImage = useCallback(async () => {
+    if (!htmlRef.current) return;
+    const htmltext = htmlRef.current;
+
+    const innerhtml = htmltext.innerHTML;
+    if (!innerhtml) return;
+
+    const canvas = await html2canvas(htmltext, {
+      backgroundColor: 'rgba(0,0,0,0)',
+      width,
+      height,
+    });
+
+    if (imageRef.current) {
+      imageRef.current.destroy();
+    }
+
+    const shape = new Konva.Image({
+      x: 5,
+      y: 5,
+      width: width - 10,
+      height: height - 10,
+      image: canvas,
+      clip: {
+        x: 0,
+        y: 0,
+        width: width - 10,
+        height: height - 10,
+      },
+    });
+
+    groupRef.current?.add(shape);
+    imageRef.current = shape;
+  }, [width, height]);
 
   useEffect(() => {
-    renderImage();
-  }, []);
+    if (!isEditing) {
+      renderImage();
+    }
+  }, [isEditing, renderImage]);
 
   const handleClick = () => {
-    if (tool === 'shape') {
-      return;
-    } else {
-      setIsEditing((prev) => !prev);
-      if (imageRef.current) {
-        if (isEditing) {
-          imageRef.current.show();
-        } else {
-          imageRef.current.hide();
-        }
-      } else return;
+    if (tool === 'shape') return;
+
+    if (tool === 'cursor' && !isEditing) {
+      imageRef.current?.hide();
+      setIsEditing(true);
     }
   };
 
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
-  };
+  function SaveHtml(newValue: string) {
+    setHtmlValue(newValue);
+    setIsEditing(false);
+  }
 
   return (
     <>
@@ -81,12 +92,15 @@ export default function Shape(props: IShapeProps) {
         <Rect stroke={'black'} width={width} height={height} />
         {isEditing && (
           <Html>
-            <textarea value={value} onChange={handleInput} />
+            <TextEditor
+              value={htmlValue}
+              save={(newValue) => SaveHtml(newValue)}
+            />
           </Html>
         )}
       </Group>
       <Html>
-        <HtmlText ref={htmlRef} html={html} id={id} />
+        <HtmlText ref={htmlRef} html={htmlValue} id={id} />
       </Html>
     </>
   );
