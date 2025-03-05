@@ -1,0 +1,12 @@
+.menu {
+  background: white;
+  border: 1px solid black;
+  padding: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.buttonMenu {
+  display: block;
+  width: 100%;
+}

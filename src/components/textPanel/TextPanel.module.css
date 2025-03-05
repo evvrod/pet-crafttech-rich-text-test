@@ -1,13 +1,19 @@
 .editor {
+  position: fixed;
+  bottom: 0;
+  /* left: 120px; */
   height: 200px;
   width: 100%;
   background-color: white;
 }
 
 .panel {
-  background-color: blanchedalmond;
-
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  background-color: aqua;
+}
+
+.content{
+  height: 100%;
 }
