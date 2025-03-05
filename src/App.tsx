@@ -1,19 +1,18 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import './App.css';
 import Canvas from './components/canvas/Canvas';
-import Control from './components/control/Control';
+import Panel from './components/panel/Panel';
 
-import { Tool } from './types/types';
 
 function App() {
-  const [tool, setTool] = useState<Tool>('cursor');
+
   const stageRef = useRef(null);
+  
   return (
     <>
-      <Canvas tool={tool} stageRef={stageRef} />
-      <Control tool={tool} setTool={setTool} />
+      <Canvas stageRef={stageRef} />
+      <Panel />
     </>
   );
 }
-
 export default App;

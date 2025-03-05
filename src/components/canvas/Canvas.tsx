@@ -1,41 +1,17 @@
-import { useState, RefObject } from 'react';
 import { Layer, Stage } from 'react-konva';
-import Konva from 'konva';
-import { Tool, Figure } from '../../types/types';
+
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+
+import { useCanvasHandlers } from './useCanvasHandlers';
+
 import Shape from '../shape/Shape';
 
-interface ICanvasProps {
-  tool: Tool;
-  stageRef: RefObject<Konva.Stage>;
-}
+export default function Canvas() {
+  const tool = useSelector((state: RootState) => state.tool.tool);
+  const figures = useSelector((state: RootState) => state.figures.figures);
 
-export default function Canvas(props: ICanvasProps) {
-  const { tool, stageRef } = props;
-  const [figures, setFigures] = useState<Figure[]>([]);
-
-  function handleOnClick(e: Konva.KonvaEventObject<MouseEvent>) {
-    if (tool === 'cursor') return;
-    const stage = e.target.getStage();
-    if (!stage) return;
-
-    const stageOffset = stage.absolutePosition();
-    const point = stage.getPointerPosition();
-    if (!point) return;
-
-    setFigures((prev) => [
-      ...prev,
-      {
-        id: Date.now().toString(36),
-        width: 100,
-        height: 100,
-        type: 'rect',
-        x: point.x - stageOffset.x,
-        y: point.y - stageOffset.y,
-        html: '',
-        text: '',
-      },
-    ]);
-  }
+  const handleOnClick = useCanvasHandlers();
 
   return (
     <Stage
@@ -43,11 +19,10 @@ export default function Canvas(props: ICanvasProps) {
       height={window.innerHeight}
       draggable={tool === 'cursor'}
       onClick={handleOnClick}
-      ref={stageRef}
     >
       <Layer>
         {figures.map((figure) => {
-          return <Shape key={figure.id} {...figure} tool={tool} />;
+          return <Shape key={figure.id} figure={figure} tool={tool} />;
         })}
       </Layer>
     </Stage>

@@ -1,106 +1,116 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { Group, Rect } from 'react-konva';
+import { Group, Rect, Circle, RegularPolygon } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import Konva from 'konva';
 import html2canvas from 'html2canvas';
 
 import TextEditor from '../textEditor/TextEditor';
 import HtmlText from '../htmlText/HtmlText';
-import 'react-quill/dist/quill.snow.css'; // или другой стиль по вашему выбору
+import 'react-quill/dist/quill.snow.css';
 
-import { Tool } from '../../types/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import {
+  selectFigure,
+  clearSelection,
+} from '../../store/slices/activeFigureSlice';
+import { openMenu, closeMenu } from '../../store/slices/menuSlice';
+
+import { useShapeHandlers } from './useShapeHandlers';
+
+import { Figure } from '../../types/types';
+
+import styles from './Shape.module.css';
 
 interface IShapeProps {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  tool: Tool;
-  html: string;
-  id: string;
-  text: string;
+  figure: Figure;
+  tool: string;
 }
 
 export default function Shape(props: IShapeProps) {
-  const { x, y, width, height, tool, html, id } = props;
+  const { figure, tool } = props;
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [htmlValue, setHtmlValue] = useState(html);
+  const {
+    isEditing,
+    htmlValue,
+    activeMenuId,
+    groupRef,
+    htmlRef,
+    handleClick,
+    openShapeEditor,
+    openTextEditor,
+    saveHtml,
+  } = useShapeHandlers(figure, tool);
 
-  const groupRef = useRef<Konva.Group | null>(null);
-  const imageRef = useRef<Konva.Image | null>(null);
-  const htmlRef = useRef<HTMLDivElement>(null);
-
-  const renderImage = useCallback(async () => {
-    if (!htmlRef.current) return;
-    const htmltext = htmlRef.current;
-
-    const innerhtml = htmltext.innerHTML;
-    if (!innerhtml) return;
-
-    const canvas = await html2canvas(htmltext, {
-      backgroundColor: 'rgba(0,0,0,0)',
-      width,
-      height,
-    });
-
-    if (imageRef.current) {
-      imageRef.current.destroy();
-    }
-
-    const shape = new Konva.Image({
-      x: 5,
-      y: 5,
-      width: width - 10,
-      height: height - 10,
-      image: canvas,
-      clip: {
-        x: 0,
-        y: 0,
-        width: width - 10,
-        height: height - 10,
-      },
-    });
-
-    groupRef.current?.add(shape);
-    imageRef.current = shape;
-  }, [width, height]);
-
-  useEffect(() => {
-    if (!isEditing) {
-      renderImage();
-    }
-  }, [isEditing, renderImage]);
-
-  const handleClick = () => {
-    if (tool === 'shape') return;
-
-    if (tool === 'cursor' && !isEditing) {
-      imageRef.current?.hide();
-      setIsEditing(true);
+  const renderShape = () => {
+    switch (figure.type) {
+      case 'circle':
+        return (
+          <Circle
+            id={figure.id}
+            stroke={figure.stroke}
+            fill={figure.fill}
+            radius={figure.radius}
+          />
+        );
+      case 'rect':
+        return (
+          <Rect
+            id={figure.id}
+            stroke={figure.stroke}
+            fill={figure.fill}
+            width={figure.width}
+            height={figure.height}
+          />
+        );
+      case 'triangle':
+        return (
+          <RegularPolygon
+            id={figure.id}
+            stroke={figure.stroke}
+            fill={figure.fill}
+            sides={figure.sides}
+            radius={figure.radius}
+          />
+        );
+      default:
+        return null;
     }
   };
 
-  function SaveHtml(newValue: string) {
-    setHtmlValue(newValue);
-    setIsEditing(false);
-  }
-
   return (
     <>
-      <Group x={x} y={y} onClick={handleClick} ref={groupRef} draggable>
-        <Rect stroke={'black'} width={width} height={height} />
+      <Group
+        x={figure.x}
+        y={figure.y}
+        onClick={handleClick}
+        ref={groupRef}
+        draggable
+      >
+        {renderShape()}
         {isEditing && (
           <Html>
             <TextEditor
               value={htmlValue}
-              save={(newValue) => SaveHtml(newValue)}
+              save={(newValue) => saveHtml(newValue)}
             />
+          </Html>
+        )}
+        {activeMenuId === figure.id && (
+          <Html>
+            <div className={styles.menu}>
+              <button className={styles.buttonMenu} onClick={openTextEditor}>
+                Поменять текст
+              </button>
+              <button className={styles.buttonMenu} onClick={openShapeEditor}>
+                Поменять фигуру
+              </button>
+            </div>
           </Html>
         )}
       </Group>
       <Html>
-        <HtmlText ref={htmlRef} html={htmlValue} id={id} />
+        <HtmlText ref={htmlRef} html={htmlValue} id={figure.id} />
       </Html>
     </>
   );
