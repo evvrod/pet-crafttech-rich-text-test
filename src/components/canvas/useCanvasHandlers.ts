@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Konva from 'konva';
@@ -16,7 +16,7 @@ function createNewFigure(
     id: Date.now().toString(36),
     x: point.x - stageOffset.x,
     y: point.y - stageOffset.y,
-    stroke: '#0000000',
+    stroke: '#000000',
     fill: '#FFFFFF',
     html: '',
     text: '',
@@ -42,6 +42,21 @@ export const useCanvasHandlers = () => {
   const tool = useSelector((state: RootState) => state.tool.tool);
   const shape = useSelector((state: RootState) => state.shape.selectedShape);
 
+  const [stageWidth, setStageWidth] = useState(window.innerWidth);
+  const [stageHeight, setStageHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setStageWidth(window.innerWidth);
+      setStageHeight(window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const handleOnClick = useCallback(
     (e: Konva.KonvaEventObject<MouseEvent>) => {
       const stage = e.target.getStage();
@@ -59,5 +74,5 @@ export const useCanvasHandlers = () => {
     [tool, shape, dispatch],
   );
 
-  return handleOnClick;
+  return { handleOnClick, stageWidth, stageHeight };
 };

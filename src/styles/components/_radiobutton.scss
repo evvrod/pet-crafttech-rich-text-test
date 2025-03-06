@@ -1,0 +1,45 @@
+@use '../variables' as *;
+
+input[type='radio'] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+  border: 2px solid $secondary-color;
+  background-color: $background-color;
+
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0 8px 4px rgba($secondary-color, 0.6);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba($secondary-color, 0.5);
+  }
+
+  &:checked {
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+  }
+}
+
+label:has(input[type='radio']) {
+  display: inline-block;
+  font-size: $font-size-sm;
+  color: $text-color;
+
+  cursor: pointer;
+
+  &:has(input[type='radio']:checked) {
+    color: $secondary-color;
+  }
+
+  &:hover {
+    color: $secondary-color;
+  }
+}

@@ -20,7 +20,8 @@
     "react-konva": "^18.2.10",
     "react-konva-utils": "^1.0.7",
     "react-quill": "^2.0.0",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "sass": "^1.85.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

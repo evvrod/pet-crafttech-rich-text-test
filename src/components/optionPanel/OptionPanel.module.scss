@@ -1,0 +1,10 @@
+@use '../../styles/_variables.scss' as *;
+
+.figures {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  font-size: $font-size-sm;
+  color: $text-color;
+}

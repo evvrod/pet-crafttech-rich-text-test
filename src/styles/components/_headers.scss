@@ -1,0 +1,11 @@
+@use '../variables' as *;
+
+h1 {
+  color: $primary-color;
+  font-size: $font-size-lg;
+}
+
+h2 {
+  color: $secondary-color;
+  font-size: $font-size-m;
+}

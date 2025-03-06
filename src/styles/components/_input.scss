@@ -1,0 +1,31 @@
+@use '../variables' as *;
+
+input[type='number'] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 100%;
+
+  font-size: $font-size-sm;
+  background-color: $canva-color;
+  color: #000000;
+  border: 2px solid $secondary-color;
+  border-radius: 4px;
+
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus {
+    border-color: $secondary-color;
+    box-shadow: 0 0 4px 2px rgba($secondary-color, 0.6);
+    outline: none;
+  }
+}

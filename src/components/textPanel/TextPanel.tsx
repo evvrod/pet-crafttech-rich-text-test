@@ -7,7 +7,7 @@ import { closeTextEditorPanel } from '../../store/slices/textEditorPanelStateSli
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import styles from './TextPanel.module.css';
+import styles from './TextPanel.module.scss';
 
 interface ITextEditorProps {
   id: string;
@@ -23,9 +23,7 @@ export default function TextPanel(props: ITextEditorProps) {
 
   const modules = {
     toolbar: [
-      [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
       ['bold', 'italic', 'underline'],
-      [{ 'align': [] }],
       [{ 'color': [] }, { 'background': [] }],
       ['clean'],
     ],

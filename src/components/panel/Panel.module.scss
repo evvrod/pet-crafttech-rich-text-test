@@ -1,0 +1,24 @@
+@use '../../styles/variables' as *;
+
+.panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 25vw;
+  height: 100vh;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: $background-color;
+
+  @media (width<500px) {
+    width: 40vw;
+  }
+}
+
+.info {
+  text-align: right;
+  font-size: $font-size-sm;
+  color: $text-color;
+}

@@ -24,7 +24,7 @@ export function useShapeHandlers(figure: Figure, tool: string) {
       return { width: figure.width, height: figure.height };
     }
     if (figure.type === 'triangle') {
-      return { width: figure.radius, height: figure.radius };
+      return { width: figure.radius * 0.8, height: figure.radius * 0.8 };
     }
     return { width: 0, height: 0 };
   }, [figure]);
@@ -44,8 +44,8 @@ export function useShapeHandlers(figure: Figure, tool: string) {
     }
 
     const shape = new Konva.Image({
-      x: -width / 2,
-      y: -height / 2,
+      x: figure.type === 'rect' ? 0 : -width / 2,
+      y: figure.type === 'rect' ? 0 : -height / 2,
       width,
       height,
       image: canvas,
@@ -53,7 +53,7 @@ export function useShapeHandlers(figure: Figure, tool: string) {
 
     groupRef.current?.add(shape);
     imageRef.current = shape;
-  }, [dimensions]);
+  }, [dimensions, figure]);
 
   useEffect(() => {
     renderImage();

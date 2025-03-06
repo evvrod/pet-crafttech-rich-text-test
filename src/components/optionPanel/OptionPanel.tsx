@@ -5,9 +5,9 @@ import {
   updateFigure,
   selectFigureById,
 } from '../../store/slices/figuresSlice';
-
-import styles from './OptionPanel.module.css';
 import { closeOptionPanel } from '../../store/slices/optionPanelStateSlice';
+
+import styles from './OptionPanel.module.scss';
 
 export default function OptionPanel() {
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ export default function OptionPanel() {
     if (localFigure.type === 'circle' || localFigure.type === 'triangle') {
       return (
         <div>
-          <label>Radius:</label>
+          <label>Radius: </label>
           <input
             type="number"
             value={localFigure.radius}
@@ -70,7 +70,7 @@ export default function OptionPanel() {
       return (
         <>
           <div>
-            <label>Width:</label>
+            <label>Width: </label>
             <input
               type="number"
               value={localFigure.width}
@@ -81,7 +81,7 @@ export default function OptionPanel() {
           </div>
 
           <div>
-            <label>Height:</label>
+            <label>Height: </label>
             <input
               type="number"
               value={localFigure.height}
@@ -98,11 +98,8 @@ export default function OptionPanel() {
   return (
     localFigure && (
       <div className={styles.figures}>
-        <p>Selected Shape: {localFigure.id}</p>
-        <p>Type: {localFigure.type}</p>
-
         <div>
-          <label>Fill Color:</label>
+          <label>Fill Color: </label>
           <input
             type="color"
             value={localFigure.fill}
@@ -111,7 +108,7 @@ export default function OptionPanel() {
         </div>
 
         <div>
-          <label>Stroke Color:</label>
+          <label>Stroke Color: </label>
           <input
             type="color"
             value={localFigure.stroke}

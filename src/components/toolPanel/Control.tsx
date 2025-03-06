@@ -13,8 +13,8 @@ export default function ToolPanel() {
   };
 
   return (
-    <>
-      <div>
+    <div>
+      <label>
         <input
           type="radio"
           id="cursor"
@@ -23,10 +23,10 @@ export default function ToolPanel() {
           checked={tool === 'cursor'}
           onChange={handleToolChange}
         />
-        <label htmlFor="cursor">Взаимодействие</label>
-      </div>
+        Взаимодействие
+      </label>
 
-      <div>
+      <label>
         <input
           type="radio"
           id="shape"
@@ -35,8 +35,8 @@ export default function ToolPanel() {
           checked={tool === 'shape'}
           onChange={handleToolChange}
         />
-        <label htmlFor="shape">Добавление</label>
-      </div>
-    </>
+        Добавление
+      </label>
+    </div>
   );
 }

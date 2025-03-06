@@ -20,7 +20,7 @@ import OptionPanel from '../optionPanel/OptionPanel';
 import ShapePanel from '../shapePanel/ShapePanel';
 import TextPanel from '../textPanel/TextPanel';
 
-import styles from './Panel.module.css';
+import styles from './Panel.module.scss';
 
 export default function Panel() {
   const dispatch = useDispatch();
@@ -68,11 +68,11 @@ export default function Panel() {
       {tool === 'shape' && <ShapePanel />}
 
       {tool === 'cursor' && selectedFigure && figure && (
-        <>
+        <div className={styles.info}>
           <h2>Selected shape</h2>
           <p>Id = {figure.id}</p>
           <p>Type = {figure.type}</p>
-        </>
+        </div>
       )}
 
       {tool === 'cursor' &&

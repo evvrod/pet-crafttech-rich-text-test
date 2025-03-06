@@ -11,12 +11,12 @@ export default function Canvas() {
   const tool = useSelector((state: RootState) => state.tool.tool);
   const figures = useSelector((state: RootState) => state.figures.figures);
 
-  const handleOnClick = useCanvasHandlers();
+  const { handleOnClick, stageHeight, stageWidth } = useCanvasHandlers();
 
   return (
     <Stage
-      width={window.innerWidth}
-      height={window.innerHeight}
+      width={stageWidth}
+      height={stageHeight}
       draggable={tool === 'cursor'}
       onClick={handleOnClick}
     >

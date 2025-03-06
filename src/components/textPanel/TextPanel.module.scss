@@ -1,19 +1,25 @@
+@use '../../styles/_variables.scss' as *;
+
 .editor {
   position: fixed;
   bottom: 0;
-  /* left: 120px; */
+
   height: 200px;
   width: 100%;
   background-color: white;
+  color: #000000;
 }
 
 .panel {
+  height: 5vh;
+  padding: 5px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background-color: aqua;
+  gap: 10px;
+  background-color: $background-color;
 }
 
-.content{
+.content {
   height: 100%;
 }
