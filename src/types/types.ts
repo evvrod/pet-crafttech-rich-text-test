@@ -9,21 +9,22 @@ export interface BaseFigure {
   stroke: string;
   fill: string;
   html: string;
-  text: string;
+  widthText: number;
+  heightText: number;
 }
 
-interface CircleFigure extends BaseFigure {
+export interface CircleFigure extends BaseFigure {
   type: 'circle';
   radius: number;
 }
 
-interface RectFigure extends BaseFigure {
+export interface RectFigure extends BaseFigure {
   type: 'rect';
   width: number;
   height: number;
 }
 
-interface TriangleFigure extends BaseFigure {
+export interface TriangleFigure extends BaseFigure {
   type: 'triangle';
   radius: number;
   sides: number;

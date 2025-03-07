@@ -66,7 +66,7 @@ export default function Shape(props: IShapeProps) {
         {renderShape()}
       </Group>
       <Html>
-        <HtmlText ref={htmlRef} html={figure.html} id={figure.id} />
+        <HtmlText ref={htmlRef} figure={figure} id={figure.id} />
       </Html>
     </>
   );

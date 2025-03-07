@@ -1,10 +1,12 @@
-import { useRef, useCallback, useEffect, useMemo } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Konva from 'konva';
 import html2canvas from 'html2canvas';
 
 import { selectEditedFigure } from '../../store/slices/figureSelectedSlice';
+
+import { isRect } from '../../utils/figureUtils';
 
 import { Figure } from '../../types/types';
 
@@ -16,27 +18,13 @@ export function useShapeHandlers(figure: Figure, tool: string) {
   const imageRef = useRef<Konva.Image | null>(null);
   const htmlRef = useRef<HTMLDivElement>(null);
 
-  const dimensions = useMemo(() => {
-    if (figure.type === 'circle') {
-      return { width: 1.5 * figure.radius, height: 1.5 * figure.radius };
-    }
-    if (figure.type === 'rect') {
-      return { width: figure.width, height: figure.height };
-    }
-    if (figure.type === 'triangle') {
-      return { width: figure.radius * 0.8, height: figure.radius * 0.8 };
-    }
-    return { width: 0, height: 0 };
-  }, [figure]);
-
   const renderImage = useCallback(async () => {
     if (!htmlRef.current) return;
-    const { width, height } = dimensions;
 
     const canvas = await html2canvas(htmlRef.current, {
       backgroundColor: 'rgba(0,0,0,0)',
-      width,
-      height,
+      width: figure.widthText,
+      height: figure.heightText,
     });
 
     if (imageRef.current) {
@@ -44,16 +32,16 @@ export function useShapeHandlers(figure: Figure, tool: string) {
     }
 
     const shape = new Konva.Image({
-      x: figure.type === 'rect' ? 0 : -width / 2,
-      y: figure.type === 'rect' ? 0 : -height / 2,
-      width,
-      height,
+      x: isRect(figure) ? 0 : -figure.widthText / 2,
+      y: isRect(figure) ? 0 : -figure.heightText / 2,
+      width: figure.widthText,
+      height: figure.heightText,
       image: canvas,
     });
 
     groupRef.current?.add(shape);
     imageRef.current = shape;
-  }, [dimensions, figure]);
+  }, [figure]);
 
   useEffect(() => {
     renderImage();

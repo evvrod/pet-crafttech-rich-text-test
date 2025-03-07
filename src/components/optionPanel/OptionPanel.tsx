@@ -7,6 +7,13 @@ import {
 } from '../../store/slices/figuresSlice';
 import { closeOptionPanel } from '../../store/slices/optionPanelStateSlice';
 
+import {
+  getTextDimensions,
+  isCircle,
+  isTriangle,
+  isRect,
+} from '../../utils/figureUtils';
+
 import styles from './OptionPanel.module.scss';
 
 export default function OptionPanel() {
@@ -37,10 +44,20 @@ export default function OptionPanel() {
   const handleFieldChange = (field: string, value: string | number) => {
     setLocalFigure((prevFigure) => {
       if (prevFigure) {
-        return {
+        let newFigure = {
           ...prevFigure,
           [field]: value,
         };
+
+        if (field === 'radius' || field === 'width' || field === 'height') {
+          const { width, height } = getTextDimensions(newFigure);
+          newFigure = {
+            ...newFigure,
+            widthText: width,
+            heightText: height,
+          };
+        }
+        return newFigure;
       }
       return prevFigure;
     });
@@ -51,7 +68,7 @@ export default function OptionPanel() {
   }
 
   const renderSizeFields = () => {
-    if (localFigure.type === 'circle' || localFigure.type === 'triangle') {
+    if (isCircle(localFigure) || isTriangle(localFigure)) {
       return (
         <div>
           <label>Radius: </label>
@@ -66,7 +83,7 @@ export default function OptionPanel() {
       );
     }
 
-    if (localFigure.type === 'rect') {
+    if (isRect(localFigure)) {
       return (
         <>
           <div>

@@ -4,38 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Konva from 'konva';
 
 import { addFigure } from '../../store/slices/figuresSlice';
-import { Figure, Shape } from '../../types/types';
 import { RootState } from '../../store';
 
-function createNewFigure(
-  point: { x: number; y: number },
-  stageOffset: { x: number; y: number },
-  shape: Shape,
-): Figure {
-  let newFigure = {
-    id: Date.now().toString(36),
-    x: point.x - stageOffset.x,
-    y: point.y - stageOffset.y,
-    stroke: '#000000',
-    fill: '#FFFFFF',
-    html: '',
-    text: '',
-  } as Figure;
-
-  switch (shape) {
-    case 'circle':
-      newFigure = { ...newFigure, type: 'circle', radius: 100 };
-      break;
-    case 'rect':
-      newFigure = { ...newFigure, type: 'rect', width: 100, height: 100 };
-      break;
-    case 'triangle':
-      newFigure = { ...newFigure, type: 'triangle', sides: 3, radius: 100 };
-      break;
-  }
-
-  return newFigure;
-}
+import createFigure from '../../utils/figureUtils';
 
 export const useCanvasHandlers = () => {
   const dispatch = useDispatch();
@@ -67,7 +38,7 @@ export const useCanvasHandlers = () => {
       if (!point) return;
 
       if (tool === 'shape') {
-        const newFigure = createNewFigure(point, stageOffset, shape);
+        const newFigure = createFigure(point, stageOffset, shape);
         dispatch(addFigure(newFigure));
       }
     },
