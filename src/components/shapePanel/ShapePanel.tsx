@@ -28,7 +28,7 @@ export default function ShapePanel() {
             checked={selectedShape === 'circle'}
             onChange={() => handleShapeChange('circle')}
           />
-          Circle
+          <span>Circle</span>
         </label>
 
         <label>
@@ -39,7 +39,7 @@ export default function ShapePanel() {
             checked={selectedShape === 'rect'}
             onChange={() => handleShapeChange('rect')}
           />
-          Rectangle
+          <span>Rectangle</span>
         </label>
 
         <label>
@@ -50,7 +50,7 @@ export default function ShapePanel() {
             checked={selectedShape === 'triangle'}
             onChange={() => handleShapeChange('triangle')}
           />
-          Triangle
+          <span>Triangle</span>
         </label>
       </div>
     </div>

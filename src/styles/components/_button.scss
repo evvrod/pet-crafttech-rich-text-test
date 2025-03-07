@@ -1,6 +1,6 @@
 @use '../variables' as *;
 
-button {
+button:not([type="button"]) {
   padding: 10px 10px;
   font-size: $font-size-sm;
 

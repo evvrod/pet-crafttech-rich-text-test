@@ -41,8 +41,13 @@ export default function TextPanel(props: ITextEditorProps) {
   return (
     <div className={styles.editor}>
       <div className={styles.panel}>
-        <button onClick={() => saveText(text)}>Save</button>
-        <button onClick={() => dispatch(closeTextEditorPanel())}>Cancel</button>
+        <h2>Edit Text</h2>
+        <div className={styles.wrapperButtons}>
+          <button onClick={() => saveText(text)}>Save</button>
+          <button onClick={() => dispatch(closeTextEditorPanel())}>
+            Cancel
+          </button>
+        </div>
       </div>
       <ReactQuill
         value={text}

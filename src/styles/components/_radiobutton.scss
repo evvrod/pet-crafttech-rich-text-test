@@ -10,7 +10,7 @@ input[type='radio'] {
 
   border-radius: 50%;
   border: 2px solid $secondary-color;
-  background-color: $background-color;
+  background-color: transparent;
 
   transition: all 0.3s ease;
 
@@ -29,17 +29,26 @@ input[type='radio'] {
 }
 
 label:has(input[type='radio']) {
-  display: inline-block;
-  font-size: $font-size-sm;
-  color: $text-color;
+  display: flex;
+  gap: 5px;
 
   cursor: pointer;
 
-  &:has(input[type='radio']:checked) {
-    color: $secondary-color;
+  & span {
+    font-size: $font-size-sm;
+    color: $text-color;
   }
 
-  &:hover {
+  &:hover span {
     color: $secondary-color;
+    font-weight: bold;
+  }
+}
+
+label:has(input[type='radio']:checked) {
+  color: $secondary-color;
+  & span {
+    color: $secondary-color;
+    font-weight: bold;
   }
 }

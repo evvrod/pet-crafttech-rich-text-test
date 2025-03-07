@@ -1,0 +1,63 @@
+@use '../../styles/variables' as *;
+
+.burger {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 18px;
+  height: 13px;
+  z-index: 1000;
+
+  display: none;
+
+  cursor: pointer;
+
+  .line {
+    height: 1px;
+    width: 18px;
+    background-color: $secondary-color;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .lineTop {
+    transform-origin: top left;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .lineMiddle {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .lineBottom {
+    transform-origin: bottom left;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  &.active {
+    .lineTop {
+      width: 25px;
+      transform: translateY(-3px) rotate(45deg);
+    }
+
+    .lineMiddle {
+      opacity: 0;
+    }
+
+    .lineBottom {
+      width: 25px;
+      transform: translateY(3px) rotate(-45deg);
+    }
+  }
+
+  &:hover .line {
+    background-color: $secondary-color;
+  }
+
+  @media (width < 350px) {
+    display: flex;
+  }
+}

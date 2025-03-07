@@ -98,6 +98,7 @@ export default function OptionPanel() {
   return (
     localFigure && (
       <div className={styles.figures}>
+        <h2>Edit Shape</h2>
         <div>
           <label>Fill Color: </label>
           <input

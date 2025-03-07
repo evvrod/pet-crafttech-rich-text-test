@@ -23,7 +23,7 @@ export default function ToolPanel() {
           checked={tool === 'cursor'}
           onChange={handleToolChange}
         />
-        Interaction
+        <span>Interaction</span>
       </label>
 
       <label>
@@ -35,7 +35,7 @@ export default function ToolPanel() {
           checked={tool === 'shape'}
           onChange={handleToolChange}
         />
-        Add
+        <span>Add</span>
       </label>
     </>
   );

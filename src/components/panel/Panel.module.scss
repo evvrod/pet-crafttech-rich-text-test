@@ -12,8 +12,22 @@
   gap: 10px;
   background-color: $background-color;
 
+  max-height: 100vh;
+  overflow-y: auto;
+
   @media (width<500px) {
     width: 40vw;
+  }
+
+  @media (width < 350px) {
+    left: -100%;
+    transition: left 0.3s ease-in-out;
+    width: 100%;
+
+  }
+
+  &.open {
+    left: 0;
   }
 }
 

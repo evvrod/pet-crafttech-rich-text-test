@@ -59,6 +59,7 @@ export default function Shape(props: IShapeProps) {
         x={figure.x}
         y={figure.y}
         onClick={handleClick}
+        onTap={handleClick} 
         ref={groupRef}
         draggable
       >

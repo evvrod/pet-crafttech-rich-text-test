@@ -22,7 +22,11 @@ import TextPanel from '../textPanel/TextPanel';
 
 import styles from './Panel.module.scss';
 
-export default function Panel() {
+interface IPanelProps {
+  isOpen: boolean;
+}
+
+export default function Panel({ isOpen }: IPanelProps) {
   const dispatch = useDispatch();
   const tool = useSelector((state: RootState) => state.tool.tool);
 
@@ -62,7 +66,7 @@ export default function Panel() {
   };
 
   return (
-    <div className={styles.panel}>
+    <div className={`${styles.panel} ${isOpen ? styles.open : ''}`}>
       <h1>Options</h1>
       <ToolPanel />
       {tool === 'shape' && <ShapePanel />}
